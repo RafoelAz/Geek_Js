@@ -139,10 +139,132 @@
 
 //?8)
 
-//function power(val, pow) {
-//  var result = val * val;
-//  if (pow > 2) {
-//    result = val * power(val, pow - 1);
+//const power = function (val, pow) {
+//  if (pow != 1) {
+//    return val * power(val, pow - 1);
+//  } else if (pow <= 0) {
+//    alert("Чушь,еще раз!");
+//  } else {
+//    return val;
 //  }
-//  return result;
+//};
+
+//!_________________________________________
+//function generateNumber() {
+//  const arr = [];
+//  while (arr.length < 4) {
+//    const d = Math.floor(Math.random() * 10);
+//    if (arr.indexOf(d) < 0) {
+//      arr.push(d);
+//    }
+//  }
+//  return arr.join("");
+//}
+
+//function play() {
+//  const N = generateNumber();
+//  console.log(N);
+//  let tryCounter = 1;
+
+//  while (true) {
+//    const myAns = prompt("enter number of 4 item");
+//    let bull = 0;
+//    let cow = 0;
+
+//    if (myAns === N) {
+//      break;
+//    }
+
+//    for (let i = 0; i < myAns.length; i++) {
+//      const symbol = myAns[i];
+//      const found = N.indexOf(symbol);
+//      if (found >= 0) {
+//        if (found === i) {
+//          bull++;
+//        } else {
+//          cow++;
+//        }
+//      }
+//    }
+//    console.log(`${bull} bull(s) and ${cow} cow(s)`);
+//    tryCounter++;
+//  }
+//  alert(`You won! ${tryCounter}`);
+//}
+
+//while (true) {
+//  play();
+//}
+
+//!____________3__________________
+
+//?1)
+
+//let num = 1;
+//let numArr = [];
+//while (num <= 100) {
+//  if (num == 1) {
+//    numArr.push(1);
+//  } else {
+//    let i = 2;
+//    while (num % i !== 0) {
+//      i++;
+//    }
+//    if (i == num) {
+//      numArr.push(i);
+//    }
+//  }
+//  num++;
+//}
+//console.log(numArr);
+
+//let n = 100;
+//let numb1 = [];
+//numb: for (let i = 1; i <= n; i++) {
+//  for (let j = 2; j < i; j++) {
+//    if (i % j == 0) continue numb;
+//  }
+//  numb1.push(i);
+//}
+//console.log(numb1);
+
+//?2-3)
+//let basket = [
+//  {
+//    id: "1",
+//    name: "bicycle1",
+//    price: 1000,
+//  },
+//  {
+//    id: "2",
+//    name: "bicycle2",
+//    price: 2000,
+//  },
+//  {
+//    id: "3",
+//    name: "bicycle3",
+//    price: 3000,
+//  },
+//];
+
+////let countBasketPrice = 0;
+////for (let i = 0; i < basket.length; i++) {
+////  countBasketPrice += basket[i].price;
+////}
+////console.log(countBasketPrice);
+
+//const countBasketPrice = basket.reduce((sum, cost) => {
+//  return sum + cost.price;
+//}, 0);
+//console.log(countBasketPrice);
+
+//?4)
+//for (i = 0; i < 10; i++, console.log(i)) {}
+
+//?5)
+
+//let j = " ";
+//for (let i = 0; i <= 20; i++) {
+//  j += "*";
+//  console.log(j);
 //}
