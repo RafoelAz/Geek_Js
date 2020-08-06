@@ -1,73 +1,114 @@
-const LETTERS = ["A", "B", "C", "D", "E", "F", "G", "H"];
+const products = [
+  {
+    id: "id-01",
+    description:
+      "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Maxime, ullam amet quisquam, nulla saepe blanditiis alias, non incidunt repellat? non minima eius, vitae nulla dolorum",
+    price: 5000,
+    img: "img/01.jpg",
+  },
+  {
+    id: "id-02",
+    description:
+      "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Maxime, ullam amet quisquam, nulla saepe blanditiis alias, non incidunt repellat? non minima eius, vitae nulla dolorum",
+    price: 6000,
+    img: "img/01.jpg",
+  },
+  {
+    id: "id-03",
+    description:
+      "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Maxime, ullam amet quisquam, nulla saepe blanditiis alias, non incidunt repellat? non minima eius, vitae nulla dolorum",
+    price: 7000,
+    img: "img/01.jpg",
+  },
+  {
+    id: "id-04",
+    description:
+      "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Maxime, ullam amet quisquam, nulla saepe blanditiis alias, non incidunt repellat? non minima eius, vitae nulla dolorum",
+    price: 8000,
+    img: "img/01.jpg",
+  },
+];
 
-function board() {
-  const board = document.querySelector(".board");
-  for (let i = 0; i < 10; i++) {
-    const columBoard = document.createElement("div");
-    columBoard.classList.add("colum");
-    board.appendChild(columBoard);
-    for (let j = 0; j < 10; j++) {
-      const columBoardElement = document.createElement("div");
-      columBoardElement.classList.add("columBoardElement");
-      columBoard.appendChild(columBoardElement);
-    }
-  }
+const basket = {
+  products: [],
+  total: 0,
+};
 
-  const ALL_COLUMNS = document.querySelectorAll(".colum");
+function generateCatalog() {
+  const productsContainer = document.getElementById("products-container");
 
-  ALL_COLUMNS.forEach((boardColumnElement, boardColumnIndex) => {
-    let allCellsInColumn = boardColumnElement.querySelectorAll(".columBoardElement");
-    allCellsInColumn.forEach((cellElement, cellIndex) => {
-      if (boardColumnIndex % 2 == 0) {
-        if (cellIndex % 2 !== 0) {
-          cellElement.style.backgroundColor = "black";
-        }
-      } else {
-        if (cellIndex % 2 == 0) {
-          cellElement.style.backgroundColor = "black";
-        }
-      }
-    });
+  products.forEach((product) => {
+    const html = `
+      <div class="catalog__card">
+        <img src="${product.img}" alt="" class="catalog__card-img" />
+        <div class="catalog__card-id">${product.id}</div>
+        <div class="catalog__card-desc">
+          ${product.description}
+        </div>
+        <div class="catalog__card-cost">${product.price}$</div>
+        <button class="catalog__card-btn" data-product-id="${product.id}">PUSH TO BASKET</button>
+      </div>
+    `;
+
+    productsContainer.innerHTML += html;
   });
 
-  let firstColumn = ALL_COLUMNS[0];
-  let firstColumnCells = firstColumn.querySelectorAll(".columBoardElement");
-  firstColumnCells.forEach((element, index) => {
-    element.style.backgroundColor = "inherit";
-    element.classList.add("center");
+  const btns = Array.from(document.querySelectorAll(".catalog__card-btn"));
 
-    if (index < firstColumnCells.length - 1 && index > 0) {
-      element.innerText = 9 - index;
-    }
-  });
+  btns.forEach((b) =>
+    b.addEventListener("click", (e) => {
+      const productId = e.target.dataset.productId;
+      const foundProduct = products.find(function (p) {
+        return p.id === productId;
+      });
 
-  let lastColumn = ALL_COLUMNS[ALL_COLUMNS.length - 1];
-  let lastColumnCells = lastColumn.querySelectorAll(".columBoardElement");
-  lastColumnCells.forEach((element, index) => {
-    element.style.backgroundColor = "inherit";
-    element.classList.add("center");
+      basket.products.push(foundProduct);
+      basket.total += foundProduct.price;
 
-    if (index < lastColumnCells.length - 1 && index > 0) {
-      element.innerText = 9 - index;
-    }
-  });
-
-  ALL_COLUMNS.forEach((element, index) => {
-    let allCellsInColumn = element.querySelectorAll(".columBoardElement");
-
-    let lastCellInColumn = allCellsInColumn[allCellsInColumn.length - 1];
-    lastCellInColumn.style.backgroundColor = "inherit";
-    lastCellInColumn.classList.add("center");
-    if (index > 0 && index < ALL_COLUMNS.length - 1) {
-      lastCellInColumn.innerText = LETTERS[index - 1];
-    }
-
-    let firstCellInColumn = allCellsInColumn[0];
-    firstCellInColumn.style.backgroundColor = "inherit";
-    firstCellInColumn.classList.add("center");
-    if (index > 0 && index < ALL_COLUMNS.length - 1) {
-      firstCellInColumn.innerText = LETTERS[index - 1];
-    }
-  });
+      renderBasket();
+    })
+  );
 }
-board();
+
+function renderBasket() {
+  const basketEl = document.getElementById("basket");
+
+  basketEl.innerHTML = `
+    <h2>Basket</h2>
+    ${
+      basket.total === 0
+        ? `
+      <p>Basket is empty</p>
+    `
+        : `
+      <ul id="basket-products"></ul>
+      <p>Total: <span id="basket-total"></span></p>
+    `
+    }
+  `;
+
+  const basketProductsElement = document.getElementById("basket-products");
+  const basketTotalElement = document.getElementById("basket-total");
+
+  basket.products.forEach((product) => {
+    basketProductsElement.innerHTML += `
+      <li>
+        <p>${product.id}</p>
+        <img width="80" src="${product.img}" />
+        <p>${product.price}</p>
+        <button data-product-id="${product.id}" class="btn-basket-delete" onclick="deleteBasketProduct(this)">Delete</button>
+      </li>
+    `;
+  });
+
+  basketTotalElement.innerHTML = `${basket.total}$`;
+}
+
+function deleteBasketProduct(btn) {
+  const productId = btn.dataset.productId;
+  basket.products = basket.products.filter((p) => p.id !== productId);
+  basket.total = basket.products.reduce((total, p) => total + p.price, 0);
+  renderBasket();
+}
+
+generateCatalog();
